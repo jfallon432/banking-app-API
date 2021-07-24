@@ -24,6 +24,11 @@ public class User {
     @Column(unique = true, nullable = false)
     private String username;
 
+    @Column(nullable = false)
+    private String password;
+
+
+
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
@@ -45,6 +50,7 @@ public class User {
     public User(RegisterAccountDTO registerAccountDTO){
         this.email = registerAccountDTO.getEmail();
         this.username = registerAccountDTO.getUsername();
+        this.password =registerAccountDTO.getPassword();
         this.firstName = registerAccountDTO.getFirstName();
         this.lastName = registerAccountDTO.getLastName();
         this.dob = registerAccountDTO.getDob();

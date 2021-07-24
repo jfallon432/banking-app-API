@@ -18,6 +18,10 @@ public class RegisterAccountDTO {
     private String username;
 
     @NotEmpty
+    private String password;
+
+
+    @NotEmpty
     private String firstName;
 
     @NotEmpty
@@ -32,6 +36,10 @@ public class RegisterAccountDTO {
 
     public String getUsername() {
         return username;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public String getFirstName() {
