@@ -2,18 +2,17 @@ package com.fallon.banking.web.controllers;
 
 
 import com.fallon.banking.services.UserService;
-import com.fallon.banking.web.dtos.RegisterAccountDTO;
+import com.fallon.banking.web.dtos.AuthenticatedDTO;
+import com.fallon.banking.web.dtos.LoginUserDTO;
+import com.fallon.banking.web.dtos.RegisterUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
     @Autowired
     public UserController(UserService userService){
@@ -21,10 +20,17 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public void registerUser(@RequestBody RegisterAccountDTO registerAccountDTO ){
+    public void registerUser(@RequestBody RegisterUserDTO registerUserDTO){
 
-            userService.register(registerAccountDTO);
+            userService.register(registerUserDTO);
 
     }
+
+    @PostMapping("/login")
+    public AuthenticatedDTO loginUser(@RequestBody LoginUserDTO loginUserDTO){
+        return userService.login(loginUserDTO);
+    }
+
+
 
 }

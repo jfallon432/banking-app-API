@@ -1,0 +1,14 @@
+/Users/jamesfallon/Desktop/banking-app-API/src/main/java/com/fallon/banking/services/UserService.java
+/Users/jamesfallon/Desktop/banking-app-API/src/main/java/com/fallon/banking/exceptions/ResourcePersistenceException.java
+/Users/jamesfallon/Desktop/banking-app-API/src/main/java/com/fallon/banking/web/filters/CorsFilter.java
+/Users/jamesfallon/Desktop/banking-app-API/src/main/java/com/fallon/banking/exceptions/DataSourceException.java
+/Users/jamesfallon/Desktop/banking-app-API/src/main/java/com/fallon/banking/web/dtos/LoginAccountDTO.java
+/Users/jamesfallon/Desktop/banking-app-API/src/main/java/com/fallon/banking/web/controllers/UserController.java
+/Users/jamesfallon/Desktop/banking-app-API/src/main/java/com/fallon/banking/repositories/UserRepository.java
+/Users/jamesfallon/Desktop/banking-app-API/src/main/java/com/fallon/banking/web/dtos/AuthenticatedDTO.java
+/Users/jamesfallon/Desktop/banking-app-API/src/main/java/com/fallon/banking/web/dtos/RegisterAccountDTO.java
+/Users/jamesfallon/Desktop/banking-app-API/src/main/java/com/fallon/banking/models/Account.java
+/Users/jamesfallon/Desktop/banking-app-API/src/main/java/com/fallon/banking/BootDriver.java
+/Users/jamesfallon/Desktop/banking-app-API/src/main/java/com/fallon/banking/aspects/LoggingAspect.java
+/Users/jamesfallon/Desktop/banking-app-API/src/main/java/com/fallon/banking/exceptions/InvalidRequestException.java
+/Users/jamesfallon/Desktop/banking-app-API/src/main/java/com/fallon/banking/models/User.java

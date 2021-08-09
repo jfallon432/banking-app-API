@@ -2,11 +2,13 @@ package com.fallon.banking.models;
 
 
 
-import com.fallon.banking.web.dtos.RegisterAccountDTO;
+import com.fallon.banking.models.accounts.Account;
+import com.fallon.banking.web.dtos.RegisterUserDTO;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -16,6 +18,13 @@ public class User {
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @ManyToMany
+    @JoinTable(
+            name = "users_accounts",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "account_id"))
+    private Set<Account> accounts;
 
     @Email
     @Column(unique = true, nullable = false)
@@ -27,8 +36,6 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-
-
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
@@ -38,22 +45,27 @@ public class User {
     @Column(nullable = false)
     private LocalDate dob;
 
-    public User(int id, String email, String username, String firstName, String lastName, LocalDate dob) {
+    public User(int id, String email, String username, String password, String firstName, String lastName, LocalDate dob) {
         this.id = id;
         this.email = email;
         this.username = username;
+        this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.dob = dob;
     }
 
-    public User(RegisterAccountDTO registerAccountDTO){
-        this.email = registerAccountDTO.getEmail();
-        this.username = registerAccountDTO.getUsername();
-        this.password =registerAccountDTO.getPassword();
-        this.firstName = registerAccountDTO.getFirstName();
-        this.lastName = registerAccountDTO.getLastName();
-        this.dob = registerAccountDTO.getDob();
+    public User(RegisterUserDTO registerUserDTO){
+        this.email = registerUserDTO.getEmail();
+        this.username = registerUserDTO.getUsername();
+        this.password = registerUserDTO.getPassword();
+        this.firstName = registerUserDTO.getFirstName();
+        this.lastName = registerUserDTO.getLastName();
+        this.dob = registerUserDTO.getDob();
+    }
+
+    public User() {
+
     }
 
     public int getId() {
@@ -102,5 +114,13 @@ public class User {
 
     public void setDob(LocalDate dob) {
         this.dob = dob;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
