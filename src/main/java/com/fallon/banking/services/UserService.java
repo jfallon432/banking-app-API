@@ -8,6 +8,7 @@ import com.fallon.banking.web.dtos.AuthenticatedDTO;
 import com.fallon.banking.web.dtos.LoginUserDTO;
 import com.fallon.banking.web.dtos.RegisterUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,16 +22,18 @@ import java.util.regex.Pattern;
 @Transactional
 public class UserService {
     private UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
 
     }
 
     @Transactional
     public void register(RegisterUserDTO registerUserDTO) throws ResourcePersistenceException, InvalidRequestException {
-
+        registerUserDTO.setPassword(passwordEncoder.encode(registerUserDTO.getPassword()));
         User newUser = new User(registerUserDTO);
 
         if (isEmailTaken.test(userRepository, newUser)) throw new ResourcePersistenceException("this email is taken");

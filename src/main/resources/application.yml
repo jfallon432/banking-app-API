@@ -23,6 +23,7 @@ jwt:
   header: Authorization
   prefix: Bearer
   secret: revature
+  expiration: 14
 
 management:
   endpoints:

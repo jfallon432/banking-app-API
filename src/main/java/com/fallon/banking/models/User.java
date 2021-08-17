@@ -4,15 +4,18 @@ package com.fallon.banking.models;
 
 import com.fallon.banking.models.accounts.Account;
 import com.fallon.banking.web.dtos.RegisterUserDTO;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @Column(name = "user_id")
@@ -54,7 +57,6 @@ public class User {
         this.lastName = lastName;
         this.dob = dob;
     }
-
     public User(RegisterUserDTO registerUserDTO){
         this.email = registerUserDTO.getEmail();
         this.username = registerUserDTO.getUsername();
@@ -63,11 +65,9 @@ public class User {
         this.lastName = registerUserDTO.getLastName();
         this.dob = registerUserDTO.getDob();
     }
-
     public User() {
 
     }
-
     public int getId() {
         return id;
     }
@@ -86,6 +86,26 @@ public class User {
 
     public String getUsername() {
         return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     public void setUsername(String username) {
@@ -114,6 +134,11 @@ public class User {
 
     public void setDob(LocalDate dob) {
         this.dob = dob;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
     }
 
     public String getPassword() {

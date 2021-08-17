@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping
 public class UserController {
 
     private final UserService userService;
@@ -21,15 +21,14 @@ public class UserController {
 
     @PostMapping("/register")
     public void registerUser(@RequestBody RegisterUserDTO registerUserDTO){
-
-            userService.register(registerUserDTO);
+        userService.register(registerUserDTO);
 
     }
 
-    @PostMapping("/login")
-    public AuthenticatedDTO loginUser(@RequestBody LoginUserDTO loginUserDTO){
-        return userService.login(loginUserDTO);
-    }
+//    @PostMapping("/login")
+//    public AuthenticatedDTO loginUser(@RequestBody LoginUserDTO loginUserDTO){
+//        return userService.login(loginUserDTO);
+//    }
 
 
 
