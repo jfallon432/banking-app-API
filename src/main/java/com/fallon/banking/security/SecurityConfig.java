@@ -42,9 +42,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilter(new JwtAuthFilter(authenticationManager(), secretKey))
                 .authorizeRequests()
-                .antMatchers("/**").permitAll()
+                .antMatchers("/**", "/h2/**", "/").permitAll()
+                .and()
+                    .authorizeRequests()
+                    .antMatchers("/h2/**").permitAll()
                 .anyRequest()
                 .authenticated();
+
+        http.headers().frameOptions().disable();
 
 
 

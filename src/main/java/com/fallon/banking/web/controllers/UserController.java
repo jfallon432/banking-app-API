@@ -25,10 +25,10 @@ public class UserController {
 
     }
 
-//    @PostMapping("/login")
-//    public AuthenticatedDTO loginUser(@RequestBody LoginUserDTO loginUserDTO){
-//        return userService.login(loginUserDTO);
-//    }
+    @PostMapping("/login")
+    public AuthenticatedDTO loginUser(@RequestBody LoginUserDTO loginUserDTO){
+        return userService.login(loginUserDTO);
+    }
 
 
 

@@ -1,13 +1,13 @@
 package com.fallon.banking.services;
 
-
 import com.fallon.banking.exceptions.InvalidRequestException;
 import com.fallon.banking.exceptions.ResourcePersistenceException;
-import com.fallon.banking.models.User;
+import com.fallon.banking.models.AccountRole;
 import com.fallon.banking.models.accounts.Account;
 import com.fallon.banking.models.accounts.CheckingAccount;
 import com.fallon.banking.models.accounts.SavingsAccount;
 import com.fallon.banking.repositories.AccountRepository;
+import com.fallon.banking.repositories.AccountRoleRepository;
 import com.fallon.banking.repositories.UserRepository;
 import com.fallon.banking.web.dtos.CreateAccountDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +19,13 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import static com.fallon.banking.enums.Role.CUSTODIAN;
+
 @Service
 public class AccountService {
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
+    private final AccountRoleRepository accountRoleRepository;
     Predicate<CreateAccountDTO> isChecking;
     Predicate<CreateAccountDTO> isCheckingBalanceValid;
     Predicate<CreateAccountDTO> isSavings;
@@ -38,17 +41,22 @@ public class AccountService {
     }
 
     @Autowired
-    public AccountService(AccountRepository accountRepository, UserRepository userRepository){
+    public AccountService(AccountRepository accountRepository, UserRepository userRepository, AccountRoleRepository accountRoleRepository){
         this.accountRepository = accountRepository;
         this.userRepository = userRepository;
+        this.accountRoleRepository = accountRoleRepository;
 
     }
 
     @Transactional
     public Account createAccount(CreateAccountDTO createAccountDTO, int userID) throws InvalidRequestException, ResourcePersistenceException{
-        Set<User> users = new HashSet<>();
+        AccountRole role = new AccountRole();
+        Set<AccountRole> roles = new HashSet<>();
         Account account = null;
-        users.add(userRepository.findById(userID).orElseThrow(() -> new InvalidRequestException("User not found")));
+
+        role.setUser(userRepository.findById(userID).orElseThrow(() -> new InvalidRequestException("User not found")));
+        role.setRole(CUSTODIAN);
+        roles.add(role);
 
         if(isChecking.test(createAccountDTO)){
             if (!isCheckingBalanceValid.test(createAccountDTO)) throw new InvalidRequestException("$20 minimum for starting new accounts");
@@ -59,8 +67,10 @@ public class AccountService {
             account = new SavingsAccount(createAccountDTO);
         }
         if(account == null) throw new ResourcePersistenceException("Accounts must be of type 'checking' or 'savings'");
-        account.setUsers(users);
-        return accountRepository.save(account);
+        role.setAccount(accountRepository.save(account));
+        accountRoleRepository.save(role);
+        return role.getAccount();
+
 
     }
 

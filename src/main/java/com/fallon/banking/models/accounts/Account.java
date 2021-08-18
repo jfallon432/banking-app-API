@@ -1,5 +1,6 @@
 package com.fallon.banking.models.accounts;
 
+import com.fallon.banking.models.AccountRole;
 import com.fallon.banking.models.User;
 import com.fallon.banking.web.dtos.CreateAccountDTO;
 
@@ -16,13 +17,8 @@ public abstract class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-
-    @ManyToMany
-    @JoinTable(
-            name = "users_accounts",
-            joinColumns = @JoinColumn(name = "account_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private Set<User> users;
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+    private Set<AccountRole> roles;
 
     @Column(nullable = false)
     private String type = this.getType();
@@ -68,13 +64,6 @@ public abstract class Account {
         this.nickname = nickname;
     }
 
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
 
     public double getBalance() {
         return balance;
@@ -82,6 +71,14 @@ public abstract class Account {
 
     public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    public Set<AccountRole> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<AccountRole> roles) {
+        this.roles = roles;
     }
 
 }

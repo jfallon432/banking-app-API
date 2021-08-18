@@ -1,5 +1,6 @@
 package com.fallon.banking.services;
 
+import com.fallon.banking.enums.Role;
 import com.fallon.banking.exceptions.InvalidRequestException;
 import com.fallon.banking.exceptions.ResourcePersistenceException;
 import com.fallon.banking.models.User;
@@ -17,6 +18,9 @@ import java.time.Period;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
+
+import static com.fallon.banking.enums.Role.ADULT;
+import static com.fallon.banking.enums.Role.MINOR;
 
 @Service
 @Transactional
@@ -39,6 +43,9 @@ public class UserService {
         if (isEmailTaken.test(userRepository, newUser)) throw new ResourcePersistenceException("this email is taken");
         if (isUsernameTaken.test(userRepository, newUser))
             throw new ResourcePersistenceException("this username taken");
+
+        if(isAdult.test(newUser)) newUser.setAge(ADULT);
+        else newUser.setAge(MINOR);
         if (isUserValid(newUser)) {
             userRepository.save(newUser);
         }
@@ -65,7 +72,7 @@ public class UserService {
             throw new InvalidRequestException("missing last name");
         if (user.getDob() == null || isBlank.test(user.getDob().toString()))
             throw new InvalidRequestException("missing Data of Birth");
-        if (!isAdult.test(user)) throw new InvalidRequestException("user is not of age");
+
 
         return true;
     }

@@ -2,7 +2,7 @@ package com.fallon.banking.models;
 
 
 
-import com.fallon.banking.models.accounts.Account;
+import com.fallon.banking.enums.Role;
 import com.fallon.banking.web.dtos.RegisterUserDTO;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,12 +22,8 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToMany
-    @JoinTable(
-            name = "users_accounts",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "account_id"))
-    private Set<Account> accounts;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<AccountRole> accountRoles;
 
     @Email
     @Column(unique = true, nullable = false)
@@ -47,6 +43,10 @@ public class User implements UserDetails {
 
     @Column(nullable = false)
     private LocalDate dob;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role age;
 
     public User(int id, String email, String username, String password, String firstName, String lastName, LocalDate dob) {
         this.id = id;
@@ -147,5 +147,21 @@ public class User implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<AccountRole> getAccountRoles() {
+        return accountRoles;
+    }
+
+    public void setAccountRoles(Set<AccountRole> accountRoles) {
+        this.accountRoles = accountRoles;
+    }
+
+    public Role getAge() {
+        return age;
+    }
+
+    public void setAge(Role age) {
+        this.age = age;
     }
 }
