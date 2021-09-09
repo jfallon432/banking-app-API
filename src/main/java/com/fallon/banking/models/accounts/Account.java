@@ -3,6 +3,11 @@ package com.fallon.banking.models.accounts;
 import com.fallon.banking.models.AccountRole;
 import com.fallon.banking.models.User;
 import com.fallon.banking.web.dtos.CreateAccountDTO;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
+import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -17,7 +22,8 @@ public abstract class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "account", cascade = CascadeType.ALL)
     private Set<AccountRole> roles;
 
     @Column(nullable = false)

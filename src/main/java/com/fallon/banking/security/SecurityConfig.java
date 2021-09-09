@@ -1,6 +1,8 @@
 package com.fallon.banking.security;
 
 import com.fallon.banking.security.jwt.JwtAuthFilter;
+import com.fallon.banking.security.jwt.JwtConfig;
+import com.fallon.banking.security.jwt.JwtVerifier;
 import com.fallon.banking.services.ApplicationUserService;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -14,7 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
+import com.fallon.banking.web.filters.CorsFilter;
 import javax.crypto.SecretKey;
 
 @Configuration
@@ -26,11 +28,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final PasswordEncoder passwordEncoder;
     private final ApplicationUserService applicationUserService;
     private final SecretKey secretKey;
+    private final JwtConfig jwtConfig;
 
-    public SecurityConfig(PasswordEncoder passwordEncoder, ApplicationUserService applicationUserService, SecretKey secretKey) {
+    public SecurityConfig(PasswordEncoder passwordEncoder, ApplicationUserService applicationUserService, SecretKey secretKey, JwtConfig jwtConfig) {
         this.passwordEncoder = passwordEncoder;
         this.applicationUserService = applicationUserService;
         this.secretKey = secretKey;
+        this.jwtConfig = jwtConfig;
+
     }
     //TODO
     @Override
@@ -40,9 +45,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .addFilterBefore(new CorsFilter(), JwtAuthFilter.class)
                 .addFilter(new JwtAuthFilter(authenticationManager(), secretKey))
+                .addFilterAfter(new JwtVerifier(secretKey, jwtConfig), JwtAuthFilter.class)
                 .authorizeRequests()
-                .antMatchers("/**", "/h2/**", "/").permitAll()
+                .antMatchers("/register", "/h2/**").permitAll()
                 .and()
                     .authorizeRequests()
                     .antMatchers("/h2/**").permitAll()

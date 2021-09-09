@@ -2,6 +2,9 @@ package com.fallon.banking.models;
 
 import com.fallon.banking.enums.Role;
 import com.fallon.banking.models.accounts.Account;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -20,6 +23,7 @@ public class AccountRole {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
 
     @Column(name = "role_name", nullable = false)
     @Enumerated(EnumType.STRING)
